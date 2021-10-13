@@ -24,7 +24,7 @@ Four functions with four different parameters:
 3. thing\_add(text, text)
 4. thing\_rename(integer, text)
 
-See the file *postgresql.sql* here.
+See the file **postgresql.sql** here.
 
 
 ## API client usage
@@ -39,9 +39,9 @@ The API client should:
 
 ````
 ok, js = qa("things")
-ok, js = qa("thing\_get", 1)
-ok, js = qa("thing\_add", "new name", "category")
-ok, js = qa("thing\_rename", 2, "new name")
+ok, js = qa("thing_get", 1)
+ok, js = qa("thing_add", "new name", "category")
+ok, js = qa("thing_rename", 2, "new name")
 ````
 
 
@@ -61,9 +61,9 @@ Then, combine the function name to make the SQL string with numbered parameters.
 
 ````
 "select ok, js from things()"
-"select ok, js from thing\_get($1)"
-"select ok, js from thing\_add($1, $2)"
-"select ok, js from thing\_rename($1, $2)"
+"select ok, js from thing_get($1)"
+"select ok, js from thing_add($1, $2)"
+"select ok, js from thing_rename($1, $2)"
 ````
 
 Then, pass that to PostgreSQL's "exec_params" with the actual arguments in an array.
@@ -78,11 +78,11 @@ Dates do not need to be converted to native date type. They can remain strings.
 
 # YOUR MISSION: Do this in your language
 
-See my Ruby example here: *ruby-test.rb*
+See my Ruby example here: **ruby-test.rb**
 
 I'd like to see how this can be done in your language.
 
-First, install PostgreSQL and Ruby with the *-init.sh* scripts here.
+First, install PostgreSQL and Ruby with the **-init.sh** scripts here.
 
 Then, run "ruby test-ruby.rb" to make sure my example test works for you.
 
@@ -121,11 +121,11 @@ Again: this one API function has to work for hundreds of different PostgreSQL fu
 
 Besides the (Linux/BSD) OS-level installing of your language, make an init script (to be run as superuser) to install any libraries your example needs.
 
-My example here, *ruby-init.sh*, is just one line: "gem install pg".
+My example here, **ruby-init.sh**, is just one line: "gem install pg".
 Then the unit tests can be run as "ruby test-ruby.rb". 
 Yours should be equally simple.
 
-Re-create the seven tests I have in *test-ruby.rb*.
+Re-create the seven tests I have in **test-ruby.rb**.
 
-No need for a fancy testing suite.  Note my one "assert_equal" function in Ruby was enough.
+No need for a fancy testing suite.  Note my one "assert\_equal" function in Ruby was enough.
 
