@@ -20,6 +20,7 @@ const (
 
 type Thing map[string]interface{}
 
+//String convert interface thing value to string
 func (t Thing) String(key string) string {
 	v, ok := t[key]
 	if !ok {
@@ -34,6 +35,7 @@ func (t Thing) String(key string) string {
 	return s
 }
 
+//Bool convert interface thing value to boolean
 func (t Thing) Bool(key string) bool {
 	v, ok := t[key]
 	if !ok {
@@ -46,8 +48,10 @@ func (t Thing) Bool(key string) bool {
 	return b
 }
 
+//Things represent things collection array
 type Things []Thing
 
+//connectDb db connection
 func connectDb() (*sql.DB, error) {
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPassword, dbName)
 	db, err := sql.Open("postgres", connStr)
@@ -58,6 +62,7 @@ func connectDb() (*sql.DB, error) {
 	return db, nil
 }
 
+//DbQueryRow represent sql.QueryRow method interface to support commit/rollback method
 type DbQueryRow interface {
 	QueryRow(query string, args ...interface{}) *sql.Row
 }
@@ -69,7 +74,6 @@ func qa(db DbQueryRow, pgfunc string, args ...interface{}) (bool, []byte) {
 	}
 
 	sqlStatement := fmt.Sprintf("SELECT ok, js from %s(%s)", pgfunc, strings.Join(argString, ","))
-
 	var ok sql.NullBool
 	var js []byte
 
