@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -82,5 +83,42 @@ func qa(db DbQueryRow, pgfunc string, args ...interface{}) (bool, []byte) {
 }
 
 func main() {
+	//example
+
+	//create db connection
+	db, err := connectDb()
+	if err != nil {
+		panic(err)
+	}
+	//try to ping db. exit when error
+	if err := db.Ping(); err != nil {
+		panic(err)
+	}
+
+	//close connection at last
+	defer db.Close()
+
+	//pull data from things pg function
+	ok, js := qa(db, "things")
+	//convert to Things = array of Thing
+	var things Things
+	err = json.Unmarshal(js, &things)
+	if err != nil {
+		log.Println("unable to decode to Things struct", err)
+		return
+	}
+	fmt.Println("ok:", ok)
+	fmt.Println("things[0][name]", things[0].String("name"))
+
+	//pull data from thing_get pg func with one parameter
+	ok, js = qa(db, "thing_get", 1)
+	var thing Thing
+	err = json.Unmarshal(js, &thing)
+	if err != nil {
+		log.Println("unable to decode to Things struct", err)
+		return
+	}
+	fmt.Println("ok:", ok)
+	fmt.Println("thing.category", thing.String("category"))
 
 }
