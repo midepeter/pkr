@@ -10,14 +10,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	dbHost     = "localhost"
-	dbPort     = "5432"
-	dbUser     = "pkr"
-	dbPassword = "pkr"
-	dbName     = "pkr"
-)
-
 type Thing map[string]interface{}
 
 //String convert interface thing value to string
@@ -53,8 +45,7 @@ type Things []Thing
 
 //connectDb db connection
 func connectDb() (*sql.DB, error) {
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPassword, dbName)
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", "dbname=pkr user=pkr sslmode=disable")
 	if err != nil {
 		return nil, err
 	}
