@@ -17,13 +17,19 @@ process, the following files are created:
 - `~/.sbclrc`: small configuration file for SBCL;
 - `~/.quicklisp`: the directory with installed CL packages.
 
-## Testing
+## Testing a script
 
-Run `./cl-test.lisp`. It should either produce a test assertion (exit
-status is 1) or runs successfully (exit status is 0).
+Run `./test.sh`. It runs `cl-test.lisp`, and it should either produce a
+test assertion (exit status is 1) or run successfully (exit status is 0).
 
 On the first run, there will be some compilation output (SBCL compiles
 .lisp-files of the freshly installed packages).
 
 Also, there will likely be several harmless warnings in the output
 because not all Common Lisp libraries are perfect.
+
+## Testing an executable
+
+Run `./mk-bin.sh`. It makes `test` binary from `cl-test.lisp` file. Now,
+run `./test` and you should get the same result as above (but much faster).
+
