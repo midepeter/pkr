@@ -2,20 +2,28 @@ from <https://github.com/alezost>
 
 # Common Lisp - SBCL
 
-Two CL dependencies are required:
+We use [QuickLisp](https://www.quicklisp.org/) to install the following
+CL libraries:
 
-* <https://github.com/marijnh/Postmodern> for PostgreSQL
-* <https://common-lisp.net/project/cl-json/cl-json.html> for JSON
+- [Postmodern](https://github.com/marijnh/Postmodern) for PostgreSQL
+- [CL-JSON](https://common-lisp.net/project/cl-json/cl-json.html) for JSON
 
-[QuickLisp](https://www.quicklisp.org/) is used to install CL packages. Basically, what needed is this:
+## Initialization
 
-````
-curl -O https://beta.quicklisp.org/quicklisp.lisp
-sbcl --load quicklisp.lisp
-# The lines below are evaluated in SBCL REPL.
-(quicklisp-quickstart:install)
-(ql:quickload '("postmodern" "cl-json"))
-````
+Run `./init.sh`. It installs QuickLisp and CL dependencies. During this
+process, the following files are created:
 
-The above commands produce "~/.sbclrc" file and "~/.quicklisp" directory (where all the CL packages are placed).
+- `./quicklisp.lisp`: it can be removed as it was used only to bootstrap Quicklisp;
+- `~/.sbclrc`: small configuration file for SBCL;
+- `~/.quicklisp`: the directory with installed CL packages.
 
+## Testing
+
+Run `./cl-test.lisp`. It should either produce a test assertion (exit
+status is 1) or runs successfully (exit status is 0).
+
+On the first run, there will be some compilation output (SBCL compiles
+.lisp-files of the freshly installed packages).
+
+Also, there will likely be several harmless warnings in the output
+because not all Common Lisp libraries are perfect.
