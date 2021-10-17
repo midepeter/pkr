@@ -10,46 +10,59 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type Thing map[string]interface{}
+type Things []Thing
+
 func main() {
-	//Url to connect to database
+	//Example
+	var thing Thing
+	_, js := qa("things")
+	things, err := MarshalIntoMap(js)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(things[0]["name"])
+
+	_, js = qa("thing_get", 2)
+	err = json.Unmarshal(js, &thing)
+	if err != nil {
+		log.Println("Unable to serialize", err)
+	}
+	fmt.Println(thing["name"])
+}
+
+func conn() *sql.DB {
 	dburl := "postgres://pkr:pkr@localhost:5432/pkr"
 	db, err := sql.Open("postgres", dburl)
 	if err != nil {
 		log.Printf("Unable to connect to db %s", err)
 	}
-	_, err = MarshaIntoMap(db)
-	if err != nil {
-		fmt.Println(err)
-	}
+	return db
 }
 
-func qa(db *sql.DB, funk string, args ...interface{}) (bool, []byte) {
+var db = conn()
+
+func qa(funk string, args ...interface{}) (bool, []byte) {
 	var (
 		ok     sql.NullBool
 		js     []byte
 		params []string
 	)
-	for i, _ := range args {
+	for i := range args {
 		params = append(params, fmt.Sprintf("$%d", i+1))
 	}
-
 	err := db.QueryRow(fmt.Sprintf(`SELECT ok, js FROM %s(%s)`, funk, strings.Join(params, ",")), args...).Scan(&ok, &js)
 	if err != nil {
 		return false, nil
 	}
-
 	return ok.Bool, js
 }
 
-func MarshaIntoMap(db *sql.DB) (interface{}, error) {
-	var things []map[string]interface{}
-
-	ok, js := qa(db, "things")
-	err := json.Unmarshal([]byte(js), &things)
+func MarshalIntoMap(js []byte) (Things, error) {
+	var things Things
+	err := json.Unmarshal(js, &things)
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
-	fmt.Println(ok)
-	fmt.Println(things[0]["name"])
 	return things, nil
 }
