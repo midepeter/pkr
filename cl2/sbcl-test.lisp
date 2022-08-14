@@ -8,7 +8,7 @@
 
 (defun qa (func &rest params)
   (destructuring-bind ((ok js))
-      (postmodern:query (format nil "select ok, js from ~A(~{'~a'~^, ~})" func params))
+    (postmodern:query (format nil "select ok, js from ~A(~{'~a'~^, ~})" func params))
     (values ok (cl-json:decode-json-from-string js))))
 
 ;;; Some helper functions for tests
